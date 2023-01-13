@@ -11,6 +11,9 @@ rm ./story.txt
 
 for person in "${ARRAY[@]}"
 do
+    echo "---------------"
+    echo "Testing $person"
+
     # some people are missing public keys derive them from the certificate
     if [ ! -f ./data/$person.pem ]; then
         openssl x509 -pubkey -noout -in ./data/$person.crt > ./data/$person.pem
@@ -25,10 +28,7 @@ do
         rm ./data/$person.pem.tmp
     fi
 
-    echo "---------------"
-    echo "Testing $person"
     signature_valid="$(openssl dgst -sha256 -verify ./data/$person.pem -signature ./data/$person.sig ./data/$person.txt)"
-
     if [ "$signature_valid" = "Verified OK" ]; then
         echo "Signature is valid"
     else
