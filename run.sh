@@ -10,7 +10,10 @@ ARRAY=(baka crvenkapa lovac panda vuk zec)
 for person in "${ARRAY[@]}"
 do
     # some people are missing private keys derive them from the certificate
-    openssl x509 -pubkey -noout -in ./data/$person.crt > ./data/$person.pem
+    if [ ! -f ./data/$person.pem ]; then
+        openssl x509 -pubkey -noout -in ./data/$person.crt > ./data/$person.pem
+    fi
+
 
     echo "---------------"
     echo "Testing $person"
